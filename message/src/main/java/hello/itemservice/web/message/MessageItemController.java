@@ -7,8 +7,11 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.thymeleaf.expression.Messages;
 
 import java.util.List;
@@ -20,7 +23,7 @@ public class MessageItemController {
 
     private final ItemRepository itemRepository;
 
-
+    InternalResourceViewResolver
     @GetMapping
     public String items(Model model) {
         List<Item> items = itemRepository.findAll();
