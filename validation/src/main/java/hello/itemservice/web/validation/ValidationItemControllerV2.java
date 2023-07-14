@@ -10,6 +10,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -24,6 +26,13 @@ import java.util.Map;
 public class ValidationItemControllerV2 {
 
     private final ItemRepository itemRepository;
+    private final ItemValidator itemValidator;
+
+    @InitBinder
+    public void init(WebDataBinder dataBinder) {
+        log.info("init binder {}", dataBinder);
+        dataBinder.addValidators(itemValidator);
+    }
 
     @GetMapping
     public String items(Model model) {
@@ -189,7 +198,7 @@ public class ValidationItemControllerV2 {
     }
 
 
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV4(
             @ModelAttribute Item item
             ,BindingResult bindingResult
@@ -245,6 +254,58 @@ public class ValidationItemControllerV2 {
     }
 
 
+//    @PostMapping("/add")
+    public String addItemV5(
+            @ModelAttribute Item item
+            ,BindingResult bindingResult
+            ,RedirectAttributes redirectAttributes) {
+
+        // 바인딩 실패
+        if(bindingResult.hasErrors()) {
+            log.info("errors ={}", bindingResult);
+            return "validation/v2/addForm";
+        }
+
+//        ItemValidator.validate(item, bindingResult);
+
+
+        // 검증실패 : 에러가 1개라도 있어? 그러면 실패야.
+        if(bindingResult.hasErrors()) {
+            log.info("errors ={}", bindingResult);
+            return "validation/v2/addForm";
+        }
+
+        // 성공 로직
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/validation/v2/items/{itemId}";
+    }
+
+
+
+    @PostMapping("/add")
+    public String addItemV6(
+            @Validated
+            @ModelAttribute Item item
+            ,BindingResult bindingResult
+            ,RedirectAttributes redirectAttributes) {
+
+        log.info("item ={}" , item);
+
+        // 검증실패 : 에러가 1개라도 있어? 그러면 실패야.
+        if(bindingResult.hasErrors()) {
+            log.info("errors ={}", bindingResult);
+            return "validation/v2/addForm";
+        }
+
+        // 성공 로직
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/validation/v2/items/{itemId}";
+    }
+
 
     @GetMapping("/{itemId}/edit")
     public String editForm(@PathVariable Long itemId, Model model) {
@@ -252,6 +313,7 @@ public class ValidationItemControllerV2 {
         model.addAttribute("item", item);
         return "validation/v2/editForm";
     }
+
 
     @PostMapping("/{itemId}/edit")
     public String edit(@PathVariable Long itemId, @ModelAttribute Item item) {
