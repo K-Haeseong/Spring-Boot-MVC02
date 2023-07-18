@@ -58,7 +58,7 @@ public class HomeController {
 
 
     @GetMapping("/")
-    public String homeLoginV3(@SessionAttribute(name = "SessionConst.LOGIN_MEMBER", required = false) Member loginMember, Model model) {
+    public String homeLoginV3(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember, Model model) {
 
 //        HttpSession session = request.getSession(false);
 //        if(session == null) {
