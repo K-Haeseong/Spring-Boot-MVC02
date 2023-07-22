@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Controller
-@Slf4j
-public class ServletExController {
+    @Controller
+    @Slf4j
+    public class ServletExController {
 
-    @GetMapping("/error-ex")
+        @GetMapping("/error-ex")
     public void errorEx() {
         throw new RuntimeException("예외 발생");
     }
