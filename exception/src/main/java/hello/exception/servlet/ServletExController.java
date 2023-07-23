@@ -11,7 +11,7 @@ import java.io.IOException;
     @Slf4j
     public class ServletExController {
 
-        @GetMapping("/error-ex")
+    @GetMapping("/error-ex")
     public void errorEx() {
         throw new RuntimeException("예외 발생");
     }
