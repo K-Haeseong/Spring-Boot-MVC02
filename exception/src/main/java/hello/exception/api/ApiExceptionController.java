@@ -57,7 +57,7 @@ public class ApiExceptionController {
 
     @Data
     @AllArgsConstructor
-    private class MemberDTO {
+    static class MemberDTO {
 
         private String memberId;
         private String name;
