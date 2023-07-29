@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class ItemForm {
 
-    private Long itemId;
+//    private Long itemId;  // 필요할까?
     private String itemName;
     private MultipartFile attachFile;
     private List<MultipartFile> imageFiles;
